@@ -35,7 +35,7 @@ with open('course.csv', mode='a', newline='', encoding='utf-8') as csvfile:
    writer.writerow({"Course Code": "BSCE", 
                     "Course Name": "Bachelor of Science in Civil Engineering"})
    
-   writer.writerow({"Course Code": "BSPsy", 
+   writer.writerow({"Course Code": "BSPsych", 
                     "Course Name": "Bachelor of Science in Pyschology"})
    
    writer.writerow({"Course Code": "BSIS", 
