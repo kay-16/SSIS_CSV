@@ -1,78 +1,78 @@
-import tkinter as tk                 # //import Tkinter module as tk
-from tkinter import ttk, filedialog  # //import ttk submodule and filedialog from Tkinter
+import tkinter as tk                 
+from tkinter import ttk, filedialog  
 import csv                           # //import the csv module
-import tkinter.messagebox as mb      # //import messagebox submodule from Tkinter as mb 
+import tkinter.messagebox as mb      
 
 
-class SSISApp:                  # //defines a class name called 'SSISApp'
-    def __init__(self, root):   # //defines the contructor method for the class
-        self.root = root        # //initialise the root attribute w/ the given root window
-        self.root.title("Simple Student Information System") # //title of the root window
-        root.geometry("950x650")                             # //set initial size of the root window using geometry()
-        root.resizable(width=True, height=True)              # //'True' allows root resizing of the root window
+class SSISApp:                 
+    def __init__(self, root):  
+        self.root = root        
+        self.root.title("Simple Student Information System") 
+        root.geometry("950x650")                             
+        root.resizable(width=True, height=True)     # //allows root resizing of the root window
 
         self.file_path = ""    # //initialise file_path attribute
         self.data = []         # //initialise data attribute
 
         self.create_Widgets()  # //call create_Widgets() method to create elements in GUI
-        self.open_csv()        # //open_csv() method will open and display CSV data
+        self.open_csv()        # //open_csv() opens and displays CSV file data
 
      
 
-    def create_Widgets(self):  # //define method to create widgets
-
-
-
+# define method to create GUI widgets
+    def create_Widgets(self):  
 
     # frame for buttons
-        button_frame = tk.Frame(self.root, highlightbackground="black", highlightthickness=1) # //creates a frame for buttons called button_frame
-        button_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=20) # //layout of button_frame using pack() method
+        button_frame = tk.Frame(self.root, highlightbackground="light gray", highlightthickness=2, bg="light gray") # //creates a frame for buttons called button_frame
+        button_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=20) 
         
 
-        # //Saves edited data
-        Save2_Button = tk.Button(button_frame, text="Save Edited Data", command=self.saveEditedData, font=("Arial", 10))
+        # //Saves edited data to student.csv
+        Save2_Button = tk.Button(button_frame, text="Save Edited Data", command=self.saveEditedData, 
+                                 font=("Arial", 10, "bold"), bg="orange")
         Save2_Button.pack(side=tk.RIGHT, padx=5, pady=5)        
 
-        # //Edits date in student.csv
-        EditButton = tk.Button(button_frame, text="Edit Data", command=self.editStudentData, font=("Arial", 10))
+        # //Edits data in student.csv
+        EditButton = tk.Button(button_frame, text="Edit Data", command=self.editStudentData, font=("Arial", 10, "bold"),
+                               bg="yellow")
         EditButton.pack(side=tk.RIGHT, padx=5, pady=5)        
 
-        # //Displays data for course.csv
-        CourseButton = tk.Button(button_frame, text="Course", command=self.courseDisplayData, font=("Arial", 10))
-        CourseButton.pack(side=tk.RIGHT, padx=5, pady=5)
-
         # //Return to view student.csv data in the table
-        BackButton = tk.Button(button_frame, text="back", command=self.open_csv, font=("Arial", 10))
-        BackButton.pack(side=tk.LEFT, padx=5, pady=5)                # //place BackButton in button_frame
+        BackButton = tk.Button(button_frame, text="back", command=self.open_csv, font=("Arial", 10, "bold"),
+                               bg="black", fg="white")
+        BackButton.pack(side=tk.LEFT, padx=5, pady=5)               
 
         # //Deletes a data in student.csv after a row of data has been selected in the table
-        DeleteButton = tk.Button(button_frame, text="Delete Data", command=self.deleteStudentData, font=("Arial", 10))
-        DeleteButton.pack(side=tk.LEFT, padx=5, pady=5)              # //place DeleteButton in button_frame
+        DeleteButton = tk.Button(button_frame, text="Delete Data", command=self.deleteStudentData, font=("Arial", 10, "bold"),
+                                 bg="red", fg="white")
+        DeleteButton.pack(side=tk.LEFT, padx=5, pady=5)             
         
         # //Saves data to student.csv after inputting
-        SaveButton = tk.Button(button_frame, text="Save Data", command=self.save_csv, font=("Arial", 10))
-        SaveButton.pack(side=tk.LEFT, padx=5, pady=5)        # //place SaveButton in button_frame
+        SaveButton = tk.Button(button_frame, text="Save Data", command=self.save_csv, font=("Arial", 10,"bold"),
+                                bg="green", fg="white")
+        SaveButton.pack(side=tk.LEFT, padx=5, pady=5)      # //place SaveButton in button_frame
 
 
 
-    # exclusive frame for Search
-        s_frame = tk.Frame (self.root, highlightbackground="black", highlightthickness=1)
+    # exclusive frame for 'Search'
+        s_frame = tk.Frame (self.root, highlightbackground="light gray", highlightthickness=1, bg="light gray")
         s_frame.pack(side=tk.TOP, fill=tk.X, padx=20, pady=20)
 
 
-        tk.Label(s_frame, text="Search by ID no. or Name:").grid(row=0, column=0)
+        tk.Label(s_frame, text="Search by ID no.:", bg="light gray").grid(row=0, column=0)
         self.searchStudentText = tk.Entry(s_frame, width=40)
         self.searchStudentText.grid(row=0, column=1, padx=5, pady=5)
 
 
-        # //Search or filter students based on their name / ID no.
-        SearchButton = tk.Button(s_frame, text="Search", command=self.searchStudent, font=("Arial", 10))
+        # //Search or filter students based on ID no.
+        SearchButton = tk.Button(s_frame, text="Search", command=self.searchStudent, font=("Arial", 10, "bold"),
+                                 bg="white")
         SearchButton.grid(row=0, column=2, padx=5, pady=5)         
         
 
 
     # frame for the table, text entry & user label
-        tt_frame = tk.Frame(self.root, highlightbackground="black", highlightthickness=1) # //creates a frame called tt_frame
+        tt_frame = tk.Frame(self.root, bg="light gray") # //creates a frame called tt_frame
         tt_frame.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, padx=20, pady=20) # //layout of tt_frame using pack() method
 
          
@@ -87,46 +87,45 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
      
 
     # labels
-        studentNameLabel = tk.Label(tt_frame, text = "Full Name :") # //label for Student Name input
+        studentNameLabel = tk.Label(tt_frame, text = "Enter Full Name :", bg="light gray") # //label for Student Name input
         studentNameLabel.grid(row=2, column=0, padx=5, pady=5)            # //place label in tt_frame
 
-        studentIDnoLabel = tk.Label(tt_frame, text = "ID no. :")    # //label for ID no. input
-        studentIDnoLabel.grid(row=3, column=0, padx=5, pady=5)            # //place label in tt_frame
+        studentIDnoLabel = tk.Label(tt_frame, text = "Enter ID no. :", bg="light gray")    # //label for ID no. input
+        studentIDnoLabel.grid(row=3, column=0, padx=5, pady=5)          
 
-        studentYrLevelLabel = tk.Label(tt_frame, text = "Year Level :") # //label for Year Level input
-        studentYrLevelLabel.grid(row=4, column=0, padx=5, pady=5)             # //place label in tt_frame
+        studentYrLevelLabel = tk.Label(tt_frame, text = "Enter Year Level :", bg="light gray") # //label for Year Level input
+        studentYrLevelLabel.grid(row=4, column=0, padx=5, pady=5)            
 
-        studentGenderLabel = tk.Label(tt_frame, text = "Gender :")      # //label for Gender input
-        studentGenderLabel.grid(row=5, column=0, padx=5, pady=5)              # //place label in tt_frame
+        studentGenderLabel = tk.Label(tt_frame, text = "Enter Gender :", bg="light gray")      # //label for Gender input
+        studentGenderLabel.grid(row=5, column=0, padx=5, pady=5)             
 
-        studentCourseCodeLabel = tk.Label(tt_frame, text = "Course Code :")   # //label for Course Code input 
-        studentCourseCodeLabel.grid(row=6, column=0, padx=5, pady=5)          # //place label in tt_frame
+        studentCourseCodeLabel = tk.Label(tt_frame, text = "Enter Course Code :", bg="light gray")   # //label for Course Code input 
+        studentCourseCodeLabel.grid(row=6, column=0, padx=5, pady=5)
 
 
 
     # table 
-        self.tree = ttk.Treeview(tt_frame, columns=("Col1","Col2","Col3","Col4","Col5")) # create Treeview widget within tt_frame
-        self.tree.heading("Col1", text="Student Name", anchor="center") # Col1 (column 1) is called 'Student Name'
-        self.tree.heading("Col2", text="ID No.", anchor="center")       # Col2 (column 2) is called 'ID no.'
-        self.tree.heading("Col3", text="Year Level", anchor="center")   # Col3 (column 3) is called 'Year Level'
-        self.tree.heading("Col4", text="Gender", anchor="center")       # Col4 (column 4) is called 'Gender' 
-        self.tree.heading("Col5", text="Course Code", anchor="center")  # Col5 (column 5) is called ' Course Code'
+        self.tree = ttk.Treeview(tt_frame, columns=("Col1","Col2","Col3","Col4","Col5")) # //create Treeview widget within tt_frame
+        self.tree.heading("Col1", text="Student Name", anchor="center") 
+        self.tree.heading("Col2", text="ID No.", anchor="center")       
+        self.tree.heading("Col3", text="Year Level", anchor="center")   
+        self.tree.heading("Col4", text="Gender", anchor="center")       
+        self.tree.heading("Col5", text="Course Code", anchor="center")  
         self.tree.grid(row=1, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")   
         
         self.tree.heading("#0", text="#") # table row starts at index 0
-        self.tree.column("#0", width=5, anchor="w")
+        self.tree.column("#0", width=3, anchor="w")
 
         for col in ("Col1","Col2","Col3","Col4","Col5"): 
          self.tree.column(col, anchor="w", width=200)
 
-
+        
 
     # text entry
         self.nameText = tk.Text(tt_frame, height=1.4, width=38, wrap=tk.NONE) # //student name input
-        self.nameText.grid(row=2, column=0, columnspan=3, padx=5, pady=6) # layout of each text entry using 'grid()' method
-        self.nameText.bind("<Tab>", lambda event: self.next_entry_widget_is(event)) # when 'tab' key is pressed, 
-                                                                                    # it will call function 'next_entry_widget_is'
-                                                                                    # then it will proceed to the next text entry
+        self.nameText.grid(row=2, column=0, columnspan=3, padx=5, pady=6)   # //layout of each text entry using grid()
+        self.nameText.bind("<Tab>", lambda event: self.next_entry_widget_is(event))  
+        """when 'tab' key is pressed, it will call function 'next_entry_widget_is' then it will proceed to the next text entry"""
 
         self.idText = tk.Text(tt_frame, height=1.4, width=38, wrap=tk.NONE) # //ID no. input
         self.idText.grid(row=3, column=0, columnspan=3, padx=5, pady=6)
@@ -144,33 +143,33 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
         self.courseCodeText.grid(row=6, column=0, columnspan=3, padx=5, pady=6)
         self.courseCodeText.bind("<Tab>", lambda event: self.next_entry_widget_is(event))
 
+
         # //Used when all texts in text entry widget needs to be cleared after being inputted
         ClearButton = tk.Button(tt_frame, text="Clear All Text", 
-                                command=self.clearInputData, font=("Arial",10))
+                                command=self.clearInputData, font=("Arial",10, "bold", "italic"))
         ClearButton.grid(row=6, column=2, columnspan=2, padx=5, pady=5)
 
         
 
     # combobox for Course Code
-        ttk.Label(tt_frame, text = "Course Code :", font=("Arial",10)).grid(row=6, column=0, padx=5, pady=5)
-        #combo = tk.StringVar() 
-        self.courseChoice = ttk.Combobox(tt_frame, height=-10, width=49, state="readonly")
-        self.courseChoice.bind ("<<ComboboxSelected>>", self.loadStudentData) 
+        ttk.Label(tt_frame)
+        self.courseChoice = ttk.Combobox(tt_frame, height=10, width=49, state="readonly")
+        self.courseChoice.bind ("<<ComboboxSelected>>", lambda event: self.loadStudentData(event)) 
         self.courseChoice.grid(row=7, column=0, columnspan=3, padx=9, pady=9,)
-
+       
         courses = self.loadCourseCSV()
         if courses:
             self.courseChoice["values"] = [f"{code} - {name}" for code, name in courses]
             self.courseChoice.current(0)
         else:
-            mb.showerror("Error!", "Failed to load course data")
+            mb.showerror("Error!", "Failed to load course data.")
 
    
         
 
    
 
-        #--------Functions--------
+        """--------Functions--------""" 
             
 # focuses on the next entry widget as "tab" key is pressed
     def next_entry_widget_is(self,event):
@@ -179,27 +178,17 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
     
 
 
-# displays course.csv when "course" button is clicked
-    def courseDisplayData(self):
-        with open("course.csv", "r", newline="", encoding="utf=8") as csvfile:
-            reader = csv.reader(csvfile)
-            next(reader)
-            for row in reader:
-                self.tree.insert("", "end", values=row)
-
-
-
 # executes in editing a selected student data 
     def editStudentData(self):
 
         # //this checks if row is selected
         a_selected_item = self.tree.selection()
         if not a_selected_item:
-            mb.showerror("Error!", "Please select a row(item) to edit.")
+            mb.showerror("Error!", "Please select a row (item) to edit.")
             return
 
         # //stores the selected index and original data
-        self.index_selected = a_selected_item[0]
+        self.data_to_be_edited = a_selected_item[0]
         self.orig_data = self.tree.item(a_selected_item)["values"]
 
         # //populates each text entries with the original data
@@ -226,41 +215,64 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
 # saves the edited data and updates it to student.csv
     def saveEditedData(self):
 
-        # //checks if data has been edited
-        if self.index_selected is None: 
-            mb.showerror("Error!", "Please select a row (item) to edit.")
+        # //checks if there is data to edit
+        if self.data_to_be_edited is None: 
+            mb.showerror("Error!", "Please select a row (data) to edit.")
             return
         
-        # //get the edited data from each text entries and combobox
+
+        # //get the edited data from each text entries 
         studentName_input = self.nameText.get("1.0" ,tk.END).strip()
         IDno_input = self.idText.get("1.0" ,tk.END).strip()
         yearlvl_input = self.yearlvlText.get("1.0" ,tk.END).strip()
         gender_input = self.genderText.get("1.0" ,tk.END).strip()
         courseCode_input = self.courseCodeText.get("1.0" ,tk.END).strip()
 
-        # //makes sure each text entries are filled
-        if not all([studentName_input, IDno_input, yearlvl_input, gender_input, courseCode_input]):
-            mb.showerror("Error!", "Please fill in all entries before saving.")
+
+        # //checks if the inputed course code is valid/exists in the existing list of courses in course.csv
+        courses = self.loadCourseCSV()
+        course_code_entered = [code for code, _ in courses ]
+
+        if courseCode_input not in course_code_entered:
+            courseCode_input = "N/A"
+            print(course_code_entered)
+
+        else:               # //checks if course code text field is empty 
+            if not courseCode_input.strip():
+                courseCode_input = "Not Enrolled"
+
+        
+        # //makes sure each text entries are filled except for 'course code'
+        if not all([studentName_input, IDno_input, yearlvl_input, gender_input]):
+            mb.showerror("Error!", "Please fill in all entries before saving it.")
             return
         
+
         # //updates data in treeview
-        self.tree.item(self.index_selected, values=(studentName_input, IDno_input, 
+        self.tree.item(self.data_to_be_edited, values=(studentName_input, IDno_input, 
                                                     yearlvl_input, gender_input, courseCode_input))
         
-        # //resets selected index and original data
-        self.index_selected = None
-        self.orig_data = None
+        # //save the newly edited data to student.csv
+        updatedData = []
+        with open("student.csv", "r", newline="") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if row == self.orig_data:
+                    row = (studentName_input, IDno_input, yearlvl_input, gender_input, courseCode_input)
+                updatedData.append(row)
 
-        # //click "Clear All Text" after edited data are saved 
-        self.clearInputData()
-
-        # //saves edited data into student.csv
         with open("student.csv", "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
-            for child in self.tree.get_children():
-                writer.writerow(self.tree.item(child)["values"])
-
+            writer.writerows(updatedData)
+               
         mb.showinfo("Successfully Edited", "Item edited and saved.")
+
+        # //resets selected index and original data
+        self.data_to_be_edited = None
+        self.orig_data = None
+
+        # //function called as "Clear All Text" button is clicked
+        self.clearInputData()
 
 
 
@@ -273,15 +285,14 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
         for item in self.tree.get_children():
             self.tree.delete(item)
 
-        # //filter data based on Student Name or ID no.
-        data_filtered = [row for row in self.data if search_query in row[0].lower()
-                         or search_query in row[1].lower()]
+        # //filter data based on ID no.
+        data_filtered = [row for row in self.data if search_query in row[1].lower()]
         
         # //update Treeview with the filtered data
         for row in data_filtered:
             self.tree.insert("", "end", values=row)
 
-        # //Display message if no data is matched from search entry
+        # //display message if no data is matched from search entry
         if not data_filtered:
             mb.showinfo("No Results", "No matching records found.")
 
@@ -295,12 +306,12 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
         self.idText.delete("1.0", tk.END)
         self.yearlvlText.delete("1.0", tk.END)
         self.genderText.delete("1.0", tk.END)
-        self.courseCodeText.delete("1,0", tk.END)
+        self.courseCodeText.delete("1.0", tk.END)
 
 
 
 # loads the student data within the selected course
-    def loadStudentData(self, event):
+    def loadStudentData(self, event=None):
         selectedCourse = self.getSelectedCourse()
 
         if not selectedCourse:
@@ -328,12 +339,14 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
         # //display filtered data in Treeview
         self.display_csv_data()
 
+        print("Selected course data:", filteredData)
+        
 
 
+# returns the selected value (course code) from the combobox
     def getSelectedCourse(self):
-        selectedCourse = self.courseChoice.get()
-        courseCode = selectedCourse.split(" - " [0])  # //extract course code from selected values
-        return courseCode
+        selectedCourse = self.courseChoice.get().split(" - ")[0] # //extract course code from selected values
+        return selectedCourse
 
 
 
@@ -355,7 +368,6 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
 
 
 
-
 # to open CSV file
     def open_csv(self):
         filePath = "student.csv" 
@@ -366,8 +378,8 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
             with open(filePath, newline="") as csvfile:
                 csv_reader = csv.reader(csvfile)
                 self.data = list(csv_reader)
-                self.display_csv_data() # //displays the data
-                self.tree.column("#0", width=50)
+                self.display_csv_data()             # //displays the data
+                self.tree.column("#0", width=3)
 
 
 
@@ -384,24 +396,35 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
                 student_gender_input = self.genderText.get('1.0', tk.END).strip()
                 student_coursecode_input = self.courseCodeText.get('1.0', tk.END).strip()
 
+        # //checks if the inputted course code is valid/exists in the existing list of courses in course.csv
+                courses = self.loadCourseCSV()
+                course_code_entered_2 = [code for code, _ in courses ]
+
+                if student_coursecode_input not in course_code_entered_2:
+                        student_coursecode_input = "N/A"
+                        print(course_code_entered_2)
+
+                 # //if no course code is inputted
+                else:
+                    if student_coursecode_input.strip() is course_code_entered_2:
+                        student_coursecode_input = "Not Enrolled"
+
         # //checks if any text entry is empty, except for course code entry
                 if not all([student_name_input, student_IDno_input, 
                             student_yearlvl_input, student_gender_input]):
                     mb.showerror("Error!", "Please fill in all text entries before saving.")
                     return
-
-        # //if no course code is inputted
-                if not student_coursecode_input:
-                    student_coursecode_input = "Not Enrolled"
-
+                
         # //writes data to student.csv
                 csv_writer.writerow([student_name_input, student_IDno_input, student_yearlvl_input, 
                                      student_gender_input, student_coursecode_input])
+
 
         # //reload data from student.csv
         self.open_csv()
 
         mb.showinfo("Saved Data", "Data has been saved successfully.")
+
 
 
 # confirms deletion
@@ -410,13 +433,14 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
         if select_a_row:
         # //confirmation delete message
             confirmation = mb.askyesno("You're about to delete a data", 
-                                       "Are you sure you want to delete this student's data?") # //prompt message that asks user
-                                                                                               # //if they want to delete the data
+                                       "Are you sure you want to delete this student's data?") 
+            
+            """prompt message that asks user, if they want to delete the data"""                                                                           
 
             if confirmation: # //if 'yes', executeDeleteData function will be called
                 self.executeDeleteData()
                 
-        else: # //otherwise, if a row isn't selected, a prompt message will ask user to select a row
+        else:       # //otherwise, if a row isn't selected, a prompt message will ask user to select a row
             mb.showerror("Error!", "Please select a row to delete.")
 
 
@@ -453,9 +477,9 @@ class SSISApp:                  # //defines a class name called 'SSISApp'
             self.tree.delete(item)
 
         widthColumn = []
-        if self.data:       # //checks if data is not empty 
-            for k in range(len(self.data[0])):  # //use the length of first row to determine # of columns
-                columnsData =  [row[k] for row in self.data if k < len(row)] # //checks 'k' for all the length of rows
+        if self.data:                           # //checks if data is not empty 
+            for k in range(len(self.data[0])):  # //use the length of first row to determine no. of columns
+                columnsData =  [row[k] for row in self.data if k < len(row)]   # //checks 'k' for all the length of rows
                 widthMaxx = max(len(str(k)) for k in columnsData)
                 widthColumn.append(widthMaxx)
 
@@ -476,4 +500,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = SSISApp(root)
     root.mainloop()
+    
     
