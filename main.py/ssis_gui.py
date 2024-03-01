@@ -184,7 +184,7 @@ class SSISApp:
         # //this checks if row is selected
         a_selected_item = self.tree.selection()
         if not a_selected_item:
-            mb.showerror("Error!", "Please select a row (item) to edit.")
+            mb.showerror("Error!", "Please select a row to edit.")
             return
 
         # //stores the selected index and original data
@@ -233,16 +233,15 @@ class SSISApp:
         courses = self.loadCourseCSV()
         course_code_entered = [code for code, _ in courses ]
 
-        if courseCode_input not in course_code_entered:
+        if not courseCode_input.strip():     # //first checks if course code text field is empty, 
+                courseCode_input = "Not Enrolled"
+
+        elif courseCode_input not in course_code_entered: # //then checks if the inputted course exists in the course.csv
             courseCode_input = "N/A"
             print(course_code_entered)
 
-        else:               # //checks if course code text field is empty 
-            if not courseCode_input.strip():
-                courseCode_input = "Not Enrolled"
 
-        
-        # //makes sure each text entries are filled except for 'course code'
+        # //makes sure each text entries are filled, except for 'course code'
         if not all([studentName_input, IDno_input, yearlvl_input, gender_input]):
             mb.showerror("Error!", "Please fill in all entries before saving it.")
             return
@@ -252,6 +251,7 @@ class SSISApp:
         self.tree.item(self.data_to_be_edited, values=(studentName_input, IDno_input, 
                                                     yearlvl_input, gender_input, courseCode_input))
         
+
         # //save the newly edited data to student.csv
         updatedData = []
         with open("student.csv", "r", newline="") as csvfile:
@@ -320,6 +320,7 @@ class SSISApp:
         for item in self.tree.get_children(): # //clear existing data in Treeview
             self.tree.delete(item)
 
+
         # //reads all student data from CSV file into memory
         with open("student.csv", "r", newline="") as csvfile:
             reader = csv.reader(csvfile)
@@ -371,14 +372,14 @@ class SSISApp:
 # to open CSV file
     def open_csv(self):
         filePath = "student.csv" 
-        self.filePath = filePath # //set function filePath to the value of filePath
+        self.filePath = filePath 
 
         if filePath:
             self.filePath = filePath
             with open(filePath, newline="") as csvfile:
                 csv_reader = csv.reader(csvfile)
                 self.data = list(csv_reader)
-                self.display_csv_data()             # //displays the data
+                self.display_csv_data()        # //displays the data
                 self.tree.column("#0", width=3)
 
 
@@ -400,14 +401,14 @@ class SSISApp:
                 courses = self.loadCourseCSV()
                 course_code_entered_2 = [code for code, _ in courses ]
 
-                if student_coursecode_input not in course_code_entered_2:
+                # //first checks if course code text field is empty,
+                if not student_coursecode_input.strip():
+                        student_coursecode_input = "Not Enrolled"
+
+                # //then checks if the inputted course exists in the course.csv
+                elif student_coursecode_input not in course_code_entered_2:
                         student_coursecode_input = "N/A"
                         print(course_code_entered_2)
-
-                 # //if no course code is inputted
-                else:
-                    if student_coursecode_input.strip() is course_code_entered_2:
-                        student_coursecode_input = "Not Enrolled"
 
         # //checks if any text entry is empty, except for course code entry
                 if not all([student_name_input, student_IDno_input, 
@@ -418,7 +419,6 @@ class SSISApp:
         # //writes data to student.csv
                 csv_writer.writerow([student_name_input, student_IDno_input, student_yearlvl_input, 
                                      student_gender_input, student_coursecode_input])
-
 
         # //reload data from student.csv
         self.open_csv()
@@ -431,11 +431,11 @@ class SSISApp:
     def deleteStudentData(self):
         select_a_row = self.tree.selection()
         if select_a_row:
-        # //confirmation delete message
+                # //confirmation delete message
             confirmation = mb.askyesno("You're about to delete a data", 
                                        "Are you sure you want to delete this student's data?") 
             
-            """prompt message that asks user, if they want to delete the data"""                                                                           
+            """prompt message box that asks user, if they want to delete the data"""                                                                           
 
             if confirmation: # //if 'yes', executeDeleteData function will be called
                 self.executeDeleteData()
@@ -449,21 +449,22 @@ class SSISApp:
     def executeDeleteData(self):
         select_a_row = self.tree.selection()    # //selects a row from the table
         if select_a_row:                        # //if a row is selected
-            select_an_item = self.tree.item(select_a_row) # //
-            studentData = select_an_item["values"]
-            s_identifier = studentData[1]
+            select_an_item = self.tree.item(select_a_row)  # // retrieves data from selected row 
+            studentData = select_an_item["values"]  # //extracts value from the selected data
+            s_identifier = studentData[1]       # //extracts the ID no. (index 1)
 
             with open("student.csv", "r", newline="") as csvfile:
                 reader = csv.reader(csvfile)
                 data = [row for row in reader]
 
-            updatedDataNow = [row for row in data if row[1] != s_identifier]
+            # //creates a new list containing all rows from 'data' where ID no. does not match 's_identifier'
+            updatedDataNow = [row for row in data if row[1] != s_identifier] 
 
             with open("student.csv", "w", newline="") as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerows(updatedDataNow)
+                writer.writerows(updatedDataNow) # //writes the updated data back to student.csv
 
-            self.open_csv()
+            self.open_csv() # //opens and reloads the updated data
             mb.showinfo("Data Successfully Deleted", f"Row with ID {s_identifier} was removed from student.csv file.")
 
         else: 
@@ -500,5 +501,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = SSISApp(root)
     root.mainloop()
-    
     
