@@ -2,6 +2,7 @@
 A Simple Student Information System
 
 How it works:
+
 1.) Enter full name, ID no., year level, gender, and course code in their corresponding text entries.
 
 2.) After inputting all the data, click the "Save Data" button to save.
@@ -13,10 +14,13 @@ How it works:
 5.) To search/filter data, search by providing the ID no., then click the "Search" button.
 
 6.) The combobox will let you view the data under their respective courses.
+
 7.) Select the "back" button to return.
 
 8.) Select the "Clear All Text" button to clear all the input data from the text fields.
+
 9.) Course code will display "Not Enrolled" if a student leaves the 'course code' text field empty/blank.
+
 10.) Course code will display "N/A" (Not Available) if a student inputs a course in the 'course code' text field that does not exist in the course.csv file.
 
 **NOTHING TO FOLLOW**
