@@ -11,6 +11,8 @@ the student.csv file.
 6.) The combobox will let you view the data under their respective courses.
 7.) Select the "back" button to return.
 8.) Select the "Clear All Text" button to clear all the input data from the text fields.
+9.) Course code will display "Not Enrolled" if a student leaves the 'course code' text field empty/blank.
+10.) Course code will display "N/A" (Not Available) if a student inputs a course in the 'course code' text field that does not exists in the course.csv file.
 
 **NOTHING TO FOLLOW**
 
