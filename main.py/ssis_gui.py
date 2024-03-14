@@ -114,8 +114,8 @@ class SSISApp:
         self.tree.grid(row=1, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")   
         
         self.tree.heading("#0", text="#") # table row starts at index 0
-        self.tree.column("#0", width=3, anchor="w")
-
+        self.tree.column("#0", width=50, anchor="w")
+    
         for col in ("Col1","Col2","Col3","Col4","Col5"): 
          self.tree.column(col, anchor="w", width=200)
 
@@ -310,6 +310,14 @@ class SSISApp:
 
 
 
+# adjusts column width dynamically
+    def adjustColumnWidths(self):
+        for col in self.tree["columns"]:
+            self.tree.column(col, width=200, anchor="w")
+            self.tree.column("#0", width=3, anchor="w")
+
+
+
 # loads the student data within the selected course
     def loadStudentData(self, event=None):
         selectedCourse = self.getSelectedCourse()
@@ -330,9 +338,15 @@ class SSISApp:
         # //filter data based on selected course
         filteredData = [row for row in student_data if row[4] == selectedCourse]
 
+        start_numbering = 1
+
         # //update Treeview with filtered data
         for row in filteredData:
-            self.tree.insert("", "end", values=row)
+            self.tree.insert("", "end", text=str(start_numbering), values=row) # //readjusts numbering under "#" with the filtered data
+            start_numbering += 1
+
+        # //adjust the column width dynamically with the filtered data
+        self.adjustColumnWidths()
 
         # //update the 'self.data attribute if needed
         self.data = filteredData
@@ -478,7 +492,8 @@ class SSISApp:
             self.tree.delete(item)
 
         widthColumn = []
-        if self.data:                           # //checks if data is not empty 
+        if self.data:   
+                                  # //checks if data is not empty 
             for k in range(len(self.data[0])):  # //use the length of first row to determine no. of columns
                 columnsData =  [row[k] for row in self.data if k < len(row)]   # //checks 'k' for all the length of rows
                 widthMaxx = max(len(str(k)) for k in columnsData)
